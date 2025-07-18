@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.RequiresApi;
@@ -17,8 +18,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import org.osmdroid.config.Configuration;
+import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
@@ -28,7 +32,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map;
@@ -77,6 +81,9 @@ public class MainActivity extends AppCompatActivity
 
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
+
+        MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(getApplicationContext(), this);
+        map.getOverlays().add(mapEventsOverlay);
     }
 
     @Override
@@ -150,5 +157,23 @@ public class MainActivity extends AppCompatActivity
         CompassOverlay mCompassOverlay = new CompassOverlay(context, new InternalCompassOrientationProvider(context), map);
         mCompassOverlay.enableCompass();
         map.getOverlays().add(mCompassOverlay);
+    }
+
+    @Override
+    public boolean singleTapConfirmedHelper(GeoPoint p)
+    {
+        Toast.makeText(getApplicationContext(), "Single Punkt: " + p.getLatitude() + " " + p.getLongitude(), Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    @Override
+    public boolean longPressHelper(GeoPoint p)
+    {
+        Marker m = new Marker(map);
+        m.setDefaultIcon();
+        m.setPosition(p);
+        m.setSubDescription("Punkt: "  + p.getLatitude() + " " + p.getLongitude());
+        map.getOverlays().add(m);
+        return true;
     }
 }
