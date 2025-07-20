@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -36,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map;
+    Button loc;
+    MyLocationNewOverlay mLocationOverlay;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -84,6 +88,17 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(getApplicationContext(), this);
         map.getOverlays().add(mapEventsOverlay);
+
+        loc = findViewById(R.id.btn_loc);
+
+        loc.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                map.getController().setCenter(mLocationOverlay.getMyLocation());
+            }
+        });
     }
 
     @Override
@@ -146,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
     public void showLocation(Context context)
     {
-        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context),map);
+        mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context),map);
         mLocationOverlay.enableFollowLocation();
         map.getOverlays().add(mLocationOverlay);
         map.getController().setZoom(18.0);
