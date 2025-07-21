@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +20,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.osmdroid.bonuspack.kml.KmlDocument;
+import org.osmdroid.bonuspack.location.OverpassAPIProvider;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
@@ -39,12 +44,16 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map;
     Button loc;
+    Button find;
     MyLocationNewOverlay mLocationOverlay;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         //inflate and create the map
@@ -97,6 +106,17 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             public void onClick(View view)
             {
                 map.getController().setCenter(mLocationOverlay.getMyLocation());
+            }
+        });
+
+        find = findViewById(R.id.btn_find);
+
+        find.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                findRoutes();
             }
         });
     }
@@ -190,5 +210,29 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         m.setSubDescription("Punkt: "  + p.getLatitude() + " " + p.getLongitude());
         map.getOverlays().add(m);
         return true;
+    }
+
+    public void findRoutes()
+    {
+        OverpassAPIProvider overpassProvider = new OverpassAPIProvider();
+
+        GeoPoint startPoint = mLocationOverlay.getMyLocation();
+
+        BoundingBox bb = new BoundingBox(startPoint.getLatitude() + 0.5, startPoint.getLongitude() + 0.5,
+                startPoint.getLatitude() - 0.5, startPoint.getLongitude() - 0.5);
+
+        String url = overpassProvider.urlForTagSearchKml("route=hiking", bb, 500, 30);
+        KmlDocument kmlDocument = new KmlDocument();
+        boolean ok = overpassProvider.addInKmlFolder(kmlDocument.mKmlRoot, url);
+
+        if (ok)
+        {
+            FolderOverlay kmlOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(map, null, null, kmlDocument);
+            map.getOverlays().add(kmlOverlay);
+        }
+        else
+        {
+            Toast.makeText(this, "Error when loading KML", Toast.LENGTH_SHORT).show();
+        }
     }
 }
