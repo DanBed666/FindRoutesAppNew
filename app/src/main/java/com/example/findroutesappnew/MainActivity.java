@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     Button loc;
     Button find;
     MyLocationNewOverlay mLocationOverlay;
+    GeoPoint startPoint;
+    boolean yourLocation = true;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -212,6 +214,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         m.setPosition(p);
         m.setSubDescription("Punkt: "  + p.getLatitude() + " " + p.getLongitude());
         map.getOverlays().add(m);
+        yourLocation = false;
+        startPoint = p;
         return true;
     }
 
@@ -219,7 +223,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     {
         OverpassAPIProvider overpassProvider = new OverpassAPIProvider();
 
-        GeoPoint startPoint = mLocationOverlay.getMyLocation();
+        if (yourLocation)
+            startPoint = mLocationOverlay.getMyLocation();
 
         BoundingBox bb = new BoundingBox(startPoint.getLatitude() + 0.25, startPoint.getLongitude() + 0.25,
                 startPoint.getLatitude() - 0.25, startPoint.getLongitude() - 0.25);
