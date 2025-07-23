@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -21,6 +22,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import org.osmdroid.bonuspack.kml.KmlDocument;
+import org.osmdroid.bonuspack.kml.KmlFeature;
+import org.osmdroid.bonuspack.kml.KmlFolder;
 import org.osmdroid.bonuspack.location.OverpassAPIProvider;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
@@ -218,11 +221,12 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         GeoPoint startPoint = mLocationOverlay.getMyLocation();
 
-        BoundingBox bb = new BoundingBox(startPoint.getLatitude() + 0.5, startPoint.getLongitude() + 0.5,
-                startPoint.getLatitude() - 0.5, startPoint.getLongitude() - 0.5);
+        BoundingBox bb = new BoundingBox(startPoint.getLatitude() + 0.25, startPoint.getLongitude() + 0.25,
+                startPoint.getLatitude() - 0.25, startPoint.getLongitude() - 0.25);
 
         String url = overpassProvider.urlForTagSearchKml("route=hiking", bb, 500, 30);
         KmlDocument kmlDocument = new KmlDocument();
+
         boolean ok = overpassProvider.addInKmlFolder(kmlDocument.mKmlRoot, url);
 
         if (ok)
