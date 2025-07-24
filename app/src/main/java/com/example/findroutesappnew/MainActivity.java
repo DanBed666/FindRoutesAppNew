@@ -216,6 +216,9 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         map.getOverlays().add(m);
         yourLocation = false;
         startPoint = p;
+        getSupportFragmentManager().beginTransaction().setReorderingAllowed(true)
+                .add(R.id.fragmentContainerView, BottomBarFragment.class, null).commit();
+
         return true;
     }
 
