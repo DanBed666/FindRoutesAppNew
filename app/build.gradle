@@ -39,4 +39,6 @@ dependencies {
     androidTestImplementation libs.espresso.core
     implementation libs.osmdroid.android
     implementation libs.osmbonuspack
+    implementation libs.retrofit
+    implementation libs.converter.gson
 }
