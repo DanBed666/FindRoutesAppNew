@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitBuilder
 {
-    public GeocodingService getGeocodingService()
+    public static GeocodingService getGeocodingService()
     {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(GeocodingService.BASE_URL)

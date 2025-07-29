@@ -10,17 +10,18 @@ public class Place
     private String osm_id;
     private String lat;
     private String lon;
+    private String display_name;
     private Address address;
     private ArrayList<Object> boundingbox = new ArrayList<>();
 
-    public Place(String place_id, String licence, String osm_type, String osm_id, String lat, String lon, Address address, ArrayList<Object> boundingbox)
-    {
+    public Place(String place_id, String licence, String osm_type, String osm_id, String lat, String lon, String display_name, Address address, ArrayList<Object> boundingbox) {
         this.place_id = place_id;
         this.licence = licence;
         this.osm_type = osm_type;
         this.osm_id = osm_id;
         this.lat = lat;
         this.lon = lon;
+        this.display_name = display_name;
         this.address = address;
         this.boundingbox = boundingbox;
     }
@@ -71,6 +72,14 @@ public class Place
 
     public void setLon(String lon) {
         this.lon = lon;
+    }
+
+    public String getDisplay_name() {
+        return display_name;
+    }
+
+    public void setDisplay_name(String display_name) {
+        this.display_name = display_name;
     }
 
     public Address getAddress() {

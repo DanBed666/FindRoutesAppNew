@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 
 import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.bonuspack.kml.KmlFeature;
@@ -41,6 +42,8 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 {
@@ -51,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     MyLocationNewOverlay mLocationOverlay;
     GeoPoint startPoint;
     boolean yourLocation = true;
+    String apiKey = "";
+    Map<String, String> options = new HashMap<>();
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -216,8 +221,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         map.getOverlays().add(m);
         yourLocation = false;
         startPoint = p;
-        getSupportFragmentManager().beginTransaction().setReorderingAllowed(true)
-                .add(R.id.fragmentContainerView, BottomBarFragment.class, null).commit();
+
+        getPlace(p);
 
         return true;
     }
@@ -246,5 +251,27 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         {
             Toast.makeText(this, "Error when loading KML", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void getPlace(GeoPoint placeCord)
+    {
+        PlaceViewModel placeViewModel = new PlaceViewModel();
+
+        options.put("key", apiKey);
+        options.put("lat", String.valueOf(placeCord.getLatitude()));
+        options.put("lon", String.valueOf(placeCord.getLongitude()));
+        options.put("format", "json");
+
+        placeViewModel.getPlace(options).observeForever(new Observer<Place>()
+        {
+            @Override
+            public void onChanged(Place place)
+            {
+                Bundle bundle = new Bundle();
+                bundle.putString("NAZWA", place.getDisplay_name());
+                getSupportFragmentManager().beginTransaction().setReorderingAllowed(true)
+                        .add(R.id.fragmentContainerView, BottomBarFragment.class, bundle).commit();
+            }
+        });
     }
 }
