@@ -20,6 +20,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 
 import org.osmdroid.bonuspack.kml.KmlDocument;
@@ -44,6 +46,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 {
@@ -207,13 +210,26 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p)
     {
+        map.getOverlays().removeIf(x -> x instanceof Marker);
+
         Toast.makeText(getApplicationContext(), "Single Punkt: " + p.getLatitude() + " " + p.getLongitude(), Toast.LENGTH_SHORT).show();
+
+        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView) != null)
+        {
+            getSupportFragmentManager().beginTransaction()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView)))
+                    .commit();
+        }
+
         return true;
     }
 
     @Override
     public boolean longPressHelper(GeoPoint p)
     {
+        map.getOverlays().removeIf(x -> x instanceof Marker);
+
         Marker m = new Marker(map);
         m.setDefaultIcon();
         m.setPosition(p);
@@ -269,8 +285,26 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             {
                 Bundle bundle = new Bundle();
                 bundle.putString("NAZWA", place.getDisplay_name());
-                getSupportFragmentManager().beginTransaction().setReorderingAllowed(true)
-                        .add(R.id.fragmentContainerView, BottomBarFragment.class, bundle).commit();
+
+                if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView) != null)
+                {
+                    BottomBarFragment bottomBarFragment = new BottomBarFragment();
+                    bottomBarFragment.setArguments(bundle);
+
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentContainerView, bottomBarFragment)
+                            .commit();
+                }
+                else
+                {
+                    BottomBarFragment bottomBarFragment = new BottomBarFragment();
+                    bottomBarFragment.setArguments(bundle);
+
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.fragmentContainerView, bottomBarFragment)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                }
             }
         });
     }
