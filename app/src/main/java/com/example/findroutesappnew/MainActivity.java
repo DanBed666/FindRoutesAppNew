@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         if (ok)
         {
-            FolderOverlay kmlOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(map, null, null, kmlDocument);
+            FolderOverlay kmlOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(map, null, new KMLStyler(getSupportFragmentManager()), kmlDocument);
             map.getOverlays().add(kmlOverlay);
         }
         else
