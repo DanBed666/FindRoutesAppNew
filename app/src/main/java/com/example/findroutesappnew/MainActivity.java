@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     boolean yourLocation = true;
     String apiKey = "";
     Map<String, String> options = new HashMap<>();
+    BottomBarFragmentManager bottomBarFragmentManager;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -129,9 +130,12 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             @Override
             public void onClick(View view)
             {
-                findRoutes();
+                FindRoutes fr = new FindRoutes(mLocationOverlay.getMyLocation(), getApplicationContext(), map);
+                fr.findRoutes();
             }
         });
+
+        bottomBarFragmentManager = new BottomBarFragmentManager(getSupportFragmentManager());
     }
 
     @Override
@@ -216,10 +220,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView) != null)
         {
-            getSupportFragmentManager().beginTransaction()
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView)))
-                    .commit();
+            bottomBarFragmentManager.hideFragment();
         }
 
         return true;
@@ -242,33 +243,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         return true;
     }
-
-    public void findRoutes()
-    {
-        OverpassAPIProvider overpassProvider = new OverpassAPIProvider();
-
-        if (yourLocation)
-            startPoint = mLocationOverlay.getMyLocation();
-
-        BoundingBox bb = new BoundingBox(startPoint.getLatitude() + 0.25, startPoint.getLongitude() + 0.25,
-                startPoint.getLatitude() - 0.25, startPoint.getLongitude() - 0.25);
-
-        String url = overpassProvider.urlForTagSearchKml("route=hiking", bb, 500, 30);
-        KmlDocument kmlDocument = new KmlDocument();
-
-        boolean ok = overpassProvider.addInKmlFolder(kmlDocument.mKmlRoot, url);
-
-        if (ok)
-        {
-            FolderOverlay kmlOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(map, null, new KMLStyler(getSupportFragmentManager()), kmlDocument);
-            map.getOverlays().add(kmlOverlay);
-        }
-        else
-        {
-            Toast.makeText(this, "Error when loading KML", Toast.LENGTH_SHORT).show();
-        }
-    }
-
     public void getPlace(GeoPoint placeCord)
     {
         PlaceViewModel placeViewModel = new PlaceViewModel();
@@ -283,27 +257,13 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             @Override
             public void onChanged(Place place)
             {
-                Bundle bundle = new Bundle();
-                bundle.putString("NAZWA", place.getDisplay_name());
-
                 if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView) != null)
                 {
-                    BottomBarFragment bottomBarFragment = new BottomBarFragment();
-                    bottomBarFragment.setArguments(bundle);
-
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragmentContainerView, bottomBarFragment)
-                            .commit();
+                    bottomBarFragmentManager.replaceFragment(place.getDisplay_name());
                 }
                 else
                 {
-                    BottomBarFragment bottomBarFragment = new BottomBarFragment();
-                    bottomBarFragment.setArguments(bundle);
-
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.fragmentContainerView, bottomBarFragment)
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
+                    bottomBarFragmentManager.showFragment(place.getDisplay_name());
                 }
             }
         });

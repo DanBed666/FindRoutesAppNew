@@ -76,6 +76,34 @@ public class BottomBarFragment extends Fragment {
         route = v.findViewById(R.id.btn_route);
         save = v.findViewById(R.id.btn_save);
 
+        find.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                //FindRoutes fr = new FindRoutes();
+                //fr.findRoutes();
+            }
+        });
+
+        route.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+
+            }
+        });
+
         nazwa.setText(test);
         return v;
     }
