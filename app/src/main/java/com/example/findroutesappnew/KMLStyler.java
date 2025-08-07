@@ -2,6 +2,7 @@ package com.example.findroutesappnew;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
@@ -42,6 +43,8 @@ public class KMLStyler implements KmlFeature.Styler
     @Override
     public void onLineString(Polyline polyline, KmlPlacemark kmlPlacemark, KmlLineString kmlLineString)
     {
+        polyline.getOutlinePaint().setColor(Color.RED);
+
         polyline.setOnClickListener(new Polyline.OnClickListener()
         {
             @Override

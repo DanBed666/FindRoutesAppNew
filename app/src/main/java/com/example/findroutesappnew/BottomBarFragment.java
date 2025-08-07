@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 /**
@@ -26,6 +27,9 @@ public class BottomBarFragment extends Fragment {
     private String mParam2;
     String test;
     TextView nazwa;
+    Button find;
+    Button route;
+    Button save;
 
     public BottomBarFragment() {
         // Required empty public constructor
@@ -68,6 +72,10 @@ public class BottomBarFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_bottom_bar, container, false);
         nazwa = v.findViewById(R.id.blank);
+        find = v.findViewById(R.id.btn_find);
+        route = v.findViewById(R.id.btn_route);
+        save = v.findViewById(R.id.btn_save);
+
         nazwa.setText(test);
         return v;
     }
