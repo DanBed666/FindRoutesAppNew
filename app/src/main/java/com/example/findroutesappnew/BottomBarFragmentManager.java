@@ -30,6 +30,19 @@ public class BottomBarFragmentManager
                 .commit();
     }
 
+    public void showFragment(String name)
+    {
+        Bundle bundle = new Bundle();
+        bundle.putString("NAZWA", name);
+
+        BottomBarFragment bottomBarFragment = new BottomBarFragment();
+        bottomBarFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction()
+                .add(R.id.fragmentContainerView, bottomBarFragment)
+                .commit();
+    }
+
     public void hideFragment()
     {
         BottomBarFragment bottomBarFragment = new BottomBarFragment();
@@ -45,6 +58,19 @@ public class BottomBarFragmentManager
         bundle.putString("NAZWA", name);
         bundle.putDouble("LATITUDE", startPoint.getLatitude());
         bundle.putDouble("LONGITUDE", startPoint.getLongitude());
+
+        BottomBarFragment bottomBarFragment = new BottomBarFragment();
+        bottomBarFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragmentContainerView, bottomBarFragment)
+                .commit();
+    }
+
+    public void replaceFragment(String name)
+    {
+        Bundle bundle = new Bundle();
+        bundle.putString("NAZWA", name);
 
         BottomBarFragment bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);

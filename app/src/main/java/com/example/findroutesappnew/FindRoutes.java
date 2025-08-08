@@ -3,6 +3,8 @@ package com.example.findroutesappnew;
 import android.content.Context;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentManager;
+
 import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.bonuspack.location.OverpassAPIProvider;
 import org.osmdroid.util.BoundingBox;
@@ -15,12 +17,14 @@ public class FindRoutes
     GeoPoint startPoint;
     Context context;
     MapView map;
+    FragmentManager fragmentManager;
 
-    public FindRoutes(GeoPoint startPoint, Context context, MapView map)
+    public FindRoutes(GeoPoint startPoint, Context context, MapView map, FragmentManager fragmentManager)
     {
         this.startPoint = startPoint;
         this.context = context;
         this.map = map;
+        this.fragmentManager = fragmentManager;
     }
 
     public void findRoutes()
@@ -37,7 +41,7 @@ public class FindRoutes
 
         if (ok)
         {
-            FolderOverlay kmlOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(map, null, null, kmlDocument);
+            FolderOverlay kmlOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(map, null, new KMLStyler(fragmentManager), kmlDocument);
             map.getOverlays().add(kmlOverlay);
         }
         else

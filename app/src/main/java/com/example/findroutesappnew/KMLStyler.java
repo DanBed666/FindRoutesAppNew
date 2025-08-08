@@ -24,10 +24,12 @@ import org.osmdroid.views.overlay.Polyline;
 public class KMLStyler implements KmlFeature.Styler
 {
     FragmentManager fragmentManager;
+    BottomBarFragmentManager bottomBarFragmentManager;
 
     public KMLStyler(FragmentManager fragmentManager)
     {
         this.fragmentManager = fragmentManager;
+        bottomBarFragmentManager = new BottomBarFragmentManager(fragmentManager);
     }
 
     @Override
@@ -50,27 +52,13 @@ public class KMLStyler implements KmlFeature.Styler
             @Override
             public boolean onClick(Polyline polyline, MapView mapView, GeoPoint eventPos)
             {
-                Bundle bundle = new Bundle();
-                bundle.putString("NAZWA", kmlPlacemark.getExtendedData("name"));
-
                 if (fragmentManager.findFragmentById(R.id.fragmentContainerView) != null)
                 {
-                    BottomBarFragment bottomBarFragment = new BottomBarFragment();
-                    bottomBarFragment.setArguments(bundle);
-
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.fragmentContainerView, bottomBarFragment)
-                            .commit();
+                    bottomBarFragmentManager.replaceFragment(kmlPlacemark.getExtendedData("name"));
                 }
                 else
                 {
-                    BottomBarFragment bottomBarFragment = new BottomBarFragment();
-                    bottomBarFragment.setArguments(bundle);
-
-                    fragmentManager.beginTransaction()
-                            .add(R.id.fragmentContainerView, bottomBarFragment)
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                            .commit();
+                    bottomBarFragmentManager.showFragment(kmlPlacemark.getExtendedData("name"));
                 }
 
                 return true;

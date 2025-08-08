@@ -100,7 +100,7 @@ public class BottomBarFragment extends Fragment {
             @Override
             public void onClick(View view)
             {
-                FindRoutes fr = new FindRoutes(new GeoPoint(latitude, longitude),getContext(), map);
+                FindRoutes fr = new FindRoutes(new GeoPoint(latitude, longitude),getContext(), map, getParentFragmentManager());
                 fr.findRoutes();
             }
         });

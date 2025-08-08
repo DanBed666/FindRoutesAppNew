@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             @Override
             public void onClick(View view)
             {
-                FindRoutes fr = new FindRoutes(mLocationOverlay.getMyLocation(), getApplicationContext(), map);
+                FindRoutes fr = new FindRoutes(mLocationOverlay.getMyLocation(), getApplicationContext(), map, getSupportFragmentManager());
                 fr.findRoutes();
             }
         });
