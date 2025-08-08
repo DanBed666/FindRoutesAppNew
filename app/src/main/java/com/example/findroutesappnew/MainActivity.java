@@ -48,7 +48,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements MapEventsReceiver
+public class MainActivity extends AppCompatActivity implements MapEventsReceiver, MyResultReceiver
 {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map;
@@ -259,13 +259,19 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             {
                 if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView) != null)
                 {
-                    bottomBarFragmentManager.replaceFragment(place.getDisplay_name());
+                    bottomBarFragmentManager.replaceFragment(place.getDisplay_name(), placeCord);
                 }
                 else
                 {
-                    bottomBarFragmentManager.showFragment(place.getDisplay_name());
+                    bottomBarFragmentManager.showFragment(place.getDisplay_name(), placeCord);
                 }
             }
         });
+    }
+
+    @Override
+    public MapView getMapView()
+    {
+        return map;
     }
 }

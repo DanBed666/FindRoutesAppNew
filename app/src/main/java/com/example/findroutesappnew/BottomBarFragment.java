@@ -1,7 +1,9 @@
 package com.example.findroutesappnew;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -9,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,10 +31,13 @@ public class BottomBarFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     String test;
+    double latitude;
+    double longitude;
     TextView nazwa;
     Button find;
     Button route;
     Button save;
+    MyResultReceiver myResultReceiver;
 
     public BottomBarFragment() {
         // Required empty public constructor
@@ -55,6 +63,13 @@ public class BottomBarFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(@NonNull Context context)
+    {
+        super.onAttach(context);
+        myResultReceiver = (MyResultReceiver) context;
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -63,6 +78,8 @@ public class BottomBarFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
             test = getArguments().getString("NAZWA");
+            latitude = getArguments().getDouble("LATITUDE");
+            longitude = getArguments().getDouble("LONGITUDE");
         }
     }
 
@@ -76,13 +93,15 @@ public class BottomBarFragment extends Fragment {
         route = v.findViewById(R.id.btn_route);
         save = v.findViewById(R.id.btn_save);
 
+        MapView map = myResultReceiver.getMapView();
+
         find.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                //FindRoutes fr = new FindRoutes();
-                //fr.findRoutes();
+                FindRoutes fr = new FindRoutes(new GeoPoint(latitude, longitude),getContext(), map);
+                fr.findRoutes();
             }
         });
 

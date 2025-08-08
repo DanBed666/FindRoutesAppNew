@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
 
+import org.osmdroid.util.GeoPoint;
+
 public class BottomBarFragmentManager
 {
     FragmentManager fragmentManager;
@@ -13,10 +15,12 @@ public class BottomBarFragmentManager
         this.fragmentManager = fragmentManager;
     }
 
-    public void showFragment(String name)
+    public void showFragment(String name, GeoPoint startPoint)
     {
         Bundle bundle = new Bundle();
         bundle.putString("NAZWA", name);
+        bundle.putDouble("LATITUDE", startPoint.getLatitude());
+        bundle.putDouble("LONGITUDE", startPoint.getLongitude());
 
         BottomBarFragment bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);
@@ -35,10 +39,12 @@ public class BottomBarFragmentManager
                 .commit();
     }
 
-    public void replaceFragment(String name)
+    public void replaceFragment(String name, GeoPoint startPoint)
     {
         Bundle bundle = new Bundle();
         bundle.putString("NAZWA", name);
+        bundle.putDouble("LATITUDE", startPoint.getLatitude());
+        bundle.putDouble("LONGITUDE", startPoint.getLongitude());
 
         BottomBarFragment bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);
