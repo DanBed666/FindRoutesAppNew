@@ -1,6 +1,7 @@
 package com.example.findroutesappnew;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -37,7 +38,6 @@ public class BottomBarFragment extends Fragment {
     Button find;
     Button route;
     Button save;
-    MyResultReceiver myResultReceiver;
 
     public BottomBarFragment() {
         // Required empty public constructor
@@ -60,13 +60,6 @@ public class BottomBarFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context)
-    {
-        super.onAttach(context);
-        myResultReceiver = (MyResultReceiver) context;
     }
 
     @Override
@@ -93,15 +86,14 @@ public class BottomBarFragment extends Fragment {
         route = v.findViewById(R.id.btn_route);
         save = v.findViewById(R.id.btn_save);
 
-        MapView map = myResultReceiver.getMapView();
-
         find.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                FindRoutes fr = new FindRoutes(new GeoPoint(latitude, longitude),getContext(), map, getParentFragmentManager());
-                fr.findRoutes();
+                startActivity(new Intent(getContext(), FindOptionsActivity.class));
+                //FindRoutes fr = new FindRoutes(new GeoPoint(latitude, longitude),getContext(), map, getParentFragmentManager());
+                //fr.findRoutes();
             }
         });
 
