@@ -246,21 +246,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         getPlace(p);
 
-        WebView mes = new WebView(this);
-        String str = mes.getSettings().getUserAgentString();
-        Log.i("My User Agent", str);
-
-        RoadManager roadManager = new OSRMRoadManager(this, str);
-
-        ArrayList<GeoPoint> waypoints = new ArrayList<GeoPoint>();
-        waypoints.add(mLocationOverlay.getMyLocation());
-        waypoints.add(p);
-
-        Road road = roadManager.getRoad(waypoints);
-        Polyline roadOverlay = RoadManager.buildRoadOverlay(road);
-        map.getOverlays().add(roadOverlay);
-        map.invalidate();
-
         return true;
     }
     public void getPlace(GeoPoint placeCord)
@@ -293,5 +278,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public MapView getMapView()
     {
         return map;
+    }
+
+    @Override
+    public GeoPoint getStartPoint()
+    {
+        return mLocationOverlay.getMyLocation();
     }
 }

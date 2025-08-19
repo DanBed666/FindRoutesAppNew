@@ -110,7 +110,8 @@ public class BottomBarFragment extends Fragment {
             @Override
             public void onClick(View view)
             {
-
+                RoadNavigatorManager rnm = new RoadNavigatorManager(getContext(), new GeoPoint(latitude, longitude));
+                rnm.drawRoad();
             }
         });
 
