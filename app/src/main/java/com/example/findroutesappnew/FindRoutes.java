@@ -19,14 +19,16 @@ public class FindRoutes
     MapView map;
     FragmentManager fragmentManager;
     String query;
+    int color;
 
-    public FindRoutes(GeoPoint startPoint, Context context, MapView map, FragmentManager fragmentManager, String query)
+    public FindRoutes(GeoPoint startPoint, Context context, MapView map, FragmentManager fragmentManager, String query, int color)
     {
         this.startPoint = startPoint;
         this.context = context;
         this.map = map;
         this.fragmentManager = fragmentManager;
         this.query = query;
+        this.color = color;
     }
 
     public void findRoutes()
@@ -43,7 +45,7 @@ public class FindRoutes
 
         if (ok)
         {
-            FolderOverlay kmlOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(map, null, new KMLStyler(fragmentManager), kmlDocument);
+            FolderOverlay kmlOverlay = (FolderOverlay) kmlDocument.mKmlRoot.buildOverlay(map, null, new KMLStyler(fragmentManager, color), kmlDocument);
             map.getOverlays().add(kmlOverlay);
         }
         else

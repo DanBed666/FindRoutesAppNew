@@ -4,6 +4,7 @@ import static android.app.ProgressDialog.show;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -32,8 +33,8 @@ public class FindOptionsActivity extends AppCompatActivity
     RadioButton option;
     Button start;
     GeoPoint geoPoint;
-    MyResultReceiver myResultReceiver;
-    String query = "";
+    String query = "route=hiking";
+    int color = Color.WHITE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -60,7 +61,7 @@ public class FindOptionsActivity extends AppCompatActivity
             public void onCheckedChanged(RadioGroup radioGroup, int i)
             {
                 option = findViewById(radioGroup.getCheckedRadioButtonId());
-                query = getOption(option.getText().toString());
+                getOption(option.getText().toString());
 
                 Toast.makeText(getApplicationContext(), "Selected Radio Button is : " + option.getText().toString(), Toast.LENGTH_SHORT).show();
             }
@@ -73,37 +74,39 @@ public class FindOptionsActivity extends AppCompatActivity
             {
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("QUERY", query);
+                returnIntent.putExtra("COLOR", color);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });
     }
 
-    public String getOption(String option)
+    public void getOption(String option)
     {
-        String query = "route=hiking";
-
         if (Objects.equals(option, "Zolty"))
         {
             query = "route=hiking][colour=yellow";
+            color = Color.YELLOW;
         }
         else if (Objects.equals(option, "Zielony"))
         {
             query = "route=hiking][colour=green";
+            color = Color.GREEN;
         }
         else if (Objects.equals(option, "Niebieski"))
         {
             query = "route=hiking][colour=blue";
+            color = Color.BLUE;
         }
         else if (Objects.equals(option, "Czerwony"))
         {
             query = "route=hiking][colour=red";
+            color = Color.RED;
         }
         else if (Objects.equals(option, "Czarny"))
         {
             query = "route=hiking][colour=black";
+            color = Color.BLACK;
         }
-
-        return query;
     }
 }

@@ -25,10 +25,12 @@ public class KMLStyler implements KmlFeature.Styler
 {
     FragmentManager fragmentManager;
     BottomBarFragmentManager bottomBarFragmentManager;
+    int color;
 
-    public KMLStyler(FragmentManager fragmentManager)
+    public KMLStyler(FragmentManager fragmentManager, int color)
     {
         this.fragmentManager = fragmentManager;
+        this.color = color;
         bottomBarFragmentManager = new BottomBarFragmentManager(fragmentManager);
     }
 
@@ -45,7 +47,7 @@ public class KMLStyler implements KmlFeature.Styler
     @Override
     public void onLineString(Polyline polyline, KmlPlacemark kmlPlacemark, KmlLineString kmlLineString)
     {
-        polyline.getOutlinePaint().setColor(Color.RED);
+        polyline.getOutlinePaint().setColor(color);
 
         polyline.setOnClickListener(new Polyline.OnClickListener()
         {

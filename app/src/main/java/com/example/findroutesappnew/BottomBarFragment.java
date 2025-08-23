@@ -2,6 +2,7 @@ package com.example.findroutesappnew;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -45,6 +46,7 @@ public class BottomBarFragment extends Fragment {
     Button save;
     ActivityResultLauncher<Intent> someActivityResultLauncher;
     String url;
+    int color;
     MyResultReceiver myResultReceiver;
     MapView map;
 
@@ -85,8 +87,9 @@ public class BottomBarFragment extends Fragment {
                         Intent data = result.getData();
                         assert data != null;
                         url = data.getStringExtra("QUERY");
+                        color = data.getIntExtra("COLOR", Color.WHITE);
                         Toast.makeText(getContext(), url, Toast.LENGTH_SHORT).show();
-                        FindRoutes fr = new FindRoutes(new GeoPoint(latitude, longitude),getContext(), map, getParentFragmentManager(), url);
+                        FindRoutes fr = new FindRoutes(new GeoPoint(latitude, longitude),getContext(), map, getParentFragmentManager(), url, color);
                         fr.findRoutes();
                     }
                 });
