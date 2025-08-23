@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -12,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -38,6 +43,10 @@ public class BottomBarFragment extends Fragment {
     Button find;
     Button route;
     Button save;
+    ActivityResultLauncher<Intent> someActivityResultLauncher;
+    String url;
+    MyResultReceiver myResultReceiver;
+    MapView map;
 
     public BottomBarFragment() {
         // Required empty public constructor
@@ -60,6 +69,29 @@ public class BottomBarFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context)
+    {
+        myResultReceiver = (MyResultReceiver) context;
+        map = myResultReceiver.getMapView();
+
+        someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result ->
+                {
+                    if (result.getResultCode() == MainActivity.RESULT_OK)
+                    {
+                        Intent data = result.getData();
+                        assert data != null;
+                        url = data.getStringExtra("QUERY");
+                        Toast.makeText(getContext(), url, Toast.LENGTH_SHORT).show();
+                        FindRoutes fr = new FindRoutes(new GeoPoint(latitude, longitude),getContext(), map, getParentFragmentManager(), url);
+                        fr.findRoutes();
+                    }
+                });
+
+        super.onAttach(context);
     }
 
     @Override
@@ -91,9 +123,11 @@ public class BottomBarFragment extends Fragment {
             @Override
             public void onClick(View view)
             {
-                startActivity(new Intent(getContext(), FindOptionsActivity.class));
-                //FindRoutes fr = new FindRoutes(new GeoPoint(latitude, longitude),getContext(), map, getParentFragmentManager());
-                //fr.findRoutes();
+                Intent intent = new Intent(getContext(), FindOptionsActivity.class);
+                intent.putExtra("LATITUDE", latitude);
+                intent.putExtra("LONGITUDE", longitude);
+                someActivityResultLauncher.launch(intent);
+                //startActivity(intent);
             }
         });
 

@@ -22,6 +22,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 
@@ -135,8 +136,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             @Override
             public void onClick(View view)
             {
-                FindRoutes fr = new FindRoutes(mLocationOverlay.getMyLocation(), getApplicationContext(), map, getSupportFragmentManager());
-                fr.findRoutes();
+                //FindRoutes fr = new FindRoutes(mLocationOverlay.getMyLocation(), getApplicationContext(), map, getSupportFragmentManager());
+                //fr.findRoutes();
             }
         });
 
@@ -284,5 +285,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public GeoPoint getStartPoint()
     {
         return mLocationOverlay.getMyLocation();
+    }
+
+    @Override
+    public FragmentManager getFManager()
+    {
+        return getSupportFragmentManager();
     }
 }
