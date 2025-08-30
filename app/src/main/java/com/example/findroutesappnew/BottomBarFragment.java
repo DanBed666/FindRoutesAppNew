@@ -80,17 +80,21 @@ public class BottomBarFragment extends Fragment {
         map = myResultReceiver.getMapView();
 
         someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                result ->
+                new ActivityResultCallback<ActivityResult>()
                 {
-                    if (result.getResultCode() == MainActivity.RESULT_OK)
+                    @Override
+                    public void onActivityResult(ActivityResult result)
                     {
-                        Intent data = result.getData();
-                        assert data != null;
-                        url = data.getStringExtra("QUERY");
-                        color = data.getIntExtra("COLOR", Color.WHITE);
-                        Toast.makeText(getContext(), url, Toast.LENGTH_SHORT).show();
-                        FindRoutes fr = new FindRoutes(new GeoPoint(latitude, longitude),getContext(), map, getParentFragmentManager(), url, color);
-                        fr.findRoutes();
+                        if (result.getResultCode() == FindOptionsActivity.RESULT_OK)
+                        {
+                            Intent data = result.getData();
+                            assert data != null;
+                            url = data.getStringExtra("QUERY");
+                            color = data.getIntExtra("COLOR", Color.WHITE);
+                            Toast.makeText(getContext(), url, Toast.LENGTH_SHORT).show();
+                            FindRoutes fr = new FindRoutes(new GeoPoint(latitude, longitude),getContext(), map, getParentFragmentManager(), url, color);
+                            fr.findRoutes();
+                        }
                     }
                 });
 

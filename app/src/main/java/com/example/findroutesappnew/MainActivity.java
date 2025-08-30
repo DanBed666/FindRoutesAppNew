@@ -2,7 +2,9 @@ package com.example.findroutesappnew;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -14,6 +16,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -63,9 +69,10 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     MyLocationNewOverlay mLocationOverlay;
     GeoPoint startPoint;
     boolean yourLocation = true;
-    String apiKey = "";
+    String apiKey = "pk.f20efc3587b2e16667f447b8ae8065dc";
     Map<String, String> options = new HashMap<>();
     BottomBarFragmentManager bottomBarFragmentManager;
+    ActivityResultLauncher<Intent> someActivityResultLauncher;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -129,6 +136,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             }
         });
 
+        getResultFromActivity();
+
         find = findViewById(R.id.btn_find);
 
         find.setOnClickListener(new View.OnClickListener()
@@ -136,8 +145,15 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             @Override
             public void onClick(View view)
             {
-                //FindRoutes fr = new FindRoutes(mLocationOverlay.getMyLocation(), getApplicationContext(), map, getSupportFragmentManager());
-                //fr.findRoutes();
+                Intent intent = new Intent(getApplicationContext(), FindOptionsActivity.class);
+
+                GeoPoint myLocation = mLocationOverlay.getMyLocation();
+                double latitude = myLocation.getLatitude();
+                double longitude = myLocation.getLongitude();
+                intent.putExtra("LATITUDE", latitude);
+                intent.putExtra("LONGITUDE", longitude);
+
+                someActivityResultLauncher.launch(intent);
             }
         });
 
@@ -291,5 +307,27 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public FragmentManager getFManager()
     {
         return getSupportFragmentManager();
+    }
+
+    public void getResultFromActivity()
+    {
+        someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>()
+                {
+                    @Override
+                    public void onActivityResult(ActivityResult result)
+                    {
+                        if (result.getResultCode() == FindOptionsActivity.RESULT_OK)
+                        {
+                            Intent data = result.getData();
+                            assert data != null;
+                            String url = data.getStringExtra("QUERY");
+                            int color = data.getIntExtra("COLOR", Color.WHITE);
+                            Toast.makeText(getApplicationContext(), url, Toast.LENGTH_SHORT).show();
+                            FindRoutes fr = new FindRoutes(mLocationOverlay.getMyLocation(), getApplicationContext(), map, getSupportFragmentManager(), url, color);
+                            fr.findRoutes();
+                        }
+                    }
+                });
     }
 }
