@@ -327,6 +327,12 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     }
 
     @Override
+    public Button getClearButton()
+    {
+        return clear;
+    }
+
+    @Override
     public FragmentManager getFManager()
     {
         return getSupportFragmentManager();

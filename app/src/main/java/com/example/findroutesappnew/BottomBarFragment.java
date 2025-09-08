@@ -94,6 +94,7 @@ public class BottomBarFragment extends Fragment {
                             Toast.makeText(getContext(), url, Toast.LENGTH_SHORT).show();
                             FindRoutes fr = new FindRoutes(new GeoPoint(latitude, longitude),getContext(), map, getParentFragmentManager(), url, color);
                             fr.findRoutes();
+                            myResultReceiver.getClearButton().setVisibility(View.VISIBLE);
                         }
                     }
                 });
