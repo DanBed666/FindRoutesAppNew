@@ -9,6 +9,7 @@ import org.osmdroid.util.GeoPoint;
 public class BottomBarFragmentManager
 {
     FragmentManager fragmentManager;
+    BottomBarFragment bottomBarFragment;
 
     public BottomBarFragmentManager(FragmentManager fragmentManager)
     {
@@ -22,7 +23,7 @@ public class BottomBarFragmentManager
         bundle.putDouble("LATITUDE", startPoint.getLatitude());
         bundle.putDouble("LONGITUDE", startPoint.getLongitude());
 
-        BottomBarFragment bottomBarFragment = new BottomBarFragment();
+        bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction()
@@ -35,7 +36,7 @@ public class BottomBarFragmentManager
         Bundle bundle = new Bundle();
         bundle.putString("NAZWA", name);
 
-        BottomBarFragment bottomBarFragment = new BottomBarFragment();
+        bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction()
@@ -45,8 +46,6 @@ public class BottomBarFragmentManager
 
     public void hideFragment()
     {
-        BottomBarFragment bottomBarFragment = new BottomBarFragment();
-
         fragmentManager.beginTransaction()
                 .remove(bottomBarFragment)
                 .commit();
@@ -59,7 +58,7 @@ public class BottomBarFragmentManager
         bundle.putDouble("LATITUDE", startPoint.getLatitude());
         bundle.putDouble("LONGITUDE", startPoint.getLongitude());
 
-        BottomBarFragment bottomBarFragment = new BottomBarFragment();
+        bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction()
@@ -72,7 +71,7 @@ public class BottomBarFragmentManager
         Bundle bundle = new Bundle();
         bundle.putString("NAZWA", name);
 
-        BottomBarFragment bottomBarFragment = new BottomBarFragment();
+        bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);
 
         fragmentManager.beginTransaction()
