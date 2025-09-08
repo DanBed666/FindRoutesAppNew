@@ -48,6 +48,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
@@ -66,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     private MapView map;
     Button loc;
     Button find;
+    Button clear;
     MyLocationNewOverlay mLocationOverlay;
     GeoPoint startPoint;
     boolean yourLocation = true;
@@ -154,6 +156,27 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 intent.putExtra("LONGITUDE", longitude);
 
                 someActivityResultLauncher.launch(intent);
+            }
+        });
+
+        clear = findViewById(R.id.btn_clear);
+
+        clear.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                for (Overlay o : map.getOverlays())
+                {
+                    Log.i("OVERLAY", o.toString());
+
+                    if (o instanceof FolderOverlay)
+                    {
+                        map.getOverlays().remove(o);
+                    }
+                }
+
+                clear.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -326,6 +349,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                             Toast.makeText(getApplicationContext(), url, Toast.LENGTH_SHORT).show();
                             FindRoutes fr = new FindRoutes(mLocationOverlay.getMyLocation(), getApplicationContext(), map, getSupportFragmentManager(), url, color);
                             fr.findRoutes();
+                            clear.setVisibility(View.VISIBLE);
                         }
                     }
                 });
