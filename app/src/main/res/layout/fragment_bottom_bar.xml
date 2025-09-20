@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="FIND"
-                android:layout_marginStart="60dp"/>
+                android:layout_marginStart="20dp"/>
 
             <Button
                 android:id="@+id/btn_route"
@@ -48,6 +48,13 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
                 android:text="SAVE"/>
+
+            <Button
+                android:id="@+id/btn_info"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:text="INFO"/>
 
         </LinearLayout>
 

@@ -31,10 +31,11 @@ public class BottomBarFragmentManager
                 .commit();
     }
 
-    public void showFragment(String name)
+    public void showFragment(String name, RouteInfo info)
     {
         Bundle bundle = new Bundle();
         bundle.putString("NAZWA", name);
+        bundle.putSerializable("INFO", info);
 
         bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);
@@ -66,10 +67,11 @@ public class BottomBarFragmentManager
                 .commit();
     }
 
-    public void replaceFragment(String name)
+    public void replaceFragment(String name, RouteInfo info)
     {
         Bundle bundle = new Bundle();
         bundle.putString("NAZWA", name);
+        bundle.putSerializable("INFO", info);
 
         bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);

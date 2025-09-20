@@ -44,11 +44,13 @@ public class BottomBarFragment extends Fragment {
     Button find;
     Button route;
     Button save;
+    Button info;
     ActivityResultLauncher<Intent> someActivityResultLauncher;
     String url;
     int color;
     MyResultReceiver myResultReceiver;
     MapView map;
+    RouteInfo infoRoute;
 
     public BottomBarFragment() {
         // Required empty public constructor
@@ -111,6 +113,7 @@ public class BottomBarFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
             test = getArguments().getString("NAZWA");
+            infoRoute = (RouteInfo) getArguments().getSerializable("INFO");
             latitude = getArguments().getDouble("LATITUDE");
             longitude = getArguments().getDouble("LONGITUDE");
         }
@@ -125,6 +128,7 @@ public class BottomBarFragment extends Fragment {
         find = v.findViewById(R.id.btn_find);
         route = v.findViewById(R.id.btn_route);
         save = v.findViewById(R.id.btn_save);
+        info = v.findViewById(R.id.btn_info);
 
         find.setOnClickListener(new View.OnClickListener()
         {
@@ -155,6 +159,17 @@ public class BottomBarFragment extends Fragment {
             public void onClick(View view)
             {
 
+            }
+        });
+
+        info.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(getContext(), InfoActivity.class);
+                intent.putExtra("INFO", infoRoute);
+                startActivity(intent);
             }
         });
 

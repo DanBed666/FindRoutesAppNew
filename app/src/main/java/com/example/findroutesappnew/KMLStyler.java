@@ -49,6 +49,12 @@ public class KMLStyler implements KmlFeature.Styler
     {
         polyline.getOutlinePaint().setColor(color);
 
+        String name = kmlPlacemark.getExtendedData("name");
+        String colour = kmlPlacemark.getExtendedData("colour");
+        String operator = kmlPlacemark.getExtendedData("operator");
+
+        RouteInfo routeInfo = new RouteInfo(name, colour, operator);
+
         polyline.setOnClickListener(new Polyline.OnClickListener()
         {
             @Override
@@ -56,11 +62,11 @@ public class KMLStyler implements KmlFeature.Styler
             {
                 if (fragmentManager.findFragmentById(R.id.fragmentContainerView) != null)
                 {
-                    bottomBarFragmentManager.replaceFragment(kmlPlacemark.getExtendedData("name"));
+                    bottomBarFragmentManager.replaceFragment(kmlPlacemark.getExtendedData("name"), routeInfo);
                 }
                 else
                 {
-                    bottomBarFragmentManager.showFragment(kmlPlacemark.getExtendedData("name"));
+                    bottomBarFragmentManager.showFragment(kmlPlacemark.getExtendedData("name"), routeInfo);
                 }
 
                 return true;
