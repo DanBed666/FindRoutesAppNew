@@ -118,8 +118,10 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             return insets;
         });
 
+        mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(ctx), map);
+
         showCompass(ctx);
-        showLocation(ctx);
+        showLocation();
 
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
@@ -134,7 +136,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             @Override
             public void onClick(View view)
             {
-                map.getController().setCenter(mLocationOverlay.getMyLocation());
+                LocationManager locationManager = new LocationManager(map);
+                locationManager.showLocation(mLocationOverlay);
             }
         });
 
@@ -240,15 +243,12 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                     REQUEST_PERMISSIONS_REQUEST_CODE);
         }
     }
-
-    public void showLocation(Context context)
+    public void showLocation()
     {
-        mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(context),map);
         mLocationOverlay.enableFollowLocation();
         map.getOverlays().add(mLocationOverlay);
         map.getController().setZoom(18.0);
     }
-
     public void showCompass(Context context)
     {
         CompassOverlay mCompassOverlay = new CompassOverlay(context, new InternalCompassOrientationProvider(context), map);
@@ -260,8 +260,9 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public boolean singleTapConfirmedHelper(GeoPoint p)
     {
         map.getOverlays().removeIf(x -> x instanceof Marker);
+        Log.i("TAPDUPA9", "single tapd");
 
-        Toast.makeText(getApplicationContext(), "Single Punkt: " + p.getLatitude() + " " + p.getLongitude(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Single Punktos: " + p.getLatitude() + " " + p.getLongitude(), Toast.LENGTH_SHORT).show();
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView) != null)
         {
@@ -274,6 +275,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     @Override
     public boolean longPressHelper(GeoPoint p)
     {
+        Log.i("TAPDUPA9", "single tapd");
         map.getOverlays().removeIf(x -> x instanceof Marker);
 
         Marker m = new Marker(map);
