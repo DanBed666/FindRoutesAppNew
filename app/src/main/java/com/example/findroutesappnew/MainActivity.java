@@ -11,7 +11,6 @@ import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -27,29 +26,18 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 
-import org.osmdroid.bonuspack.kml.KmlDocument;
-import org.osmdroid.bonuspack.kml.KmlFeature;
-import org.osmdroid.bonuspack.kml.KmlFolder;
-import org.osmdroid.bonuspack.location.OverpassAPIProvider;
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
-import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.FolderOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
-import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
@@ -59,7 +47,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements MapEventsReceiver, MyResultReceiver
 {
@@ -75,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     Map<String, String> options = new HashMap<>();
     BottomBarFragmentManager bottomBarFragmentManager;
     ActivityResultLauncher<Intent> someActivityResultLauncher;
+    MapEventsOverlay mapEventsOverlay;
+    LocationManager locationManager;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -118,15 +107,16 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             return insets;
         });
 
-        mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(ctx), map);
+        locationManager = new LocationManager(map);
+        locationManager.showLocation();
 
         showCompass(ctx);
-        showLocation();
+
 
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
-        MapEventsOverlay mapEventsOverlay = new MapEventsOverlay(getApplicationContext(), this);
+        mapEventsOverlay = new MapEventsOverlay(getApplicationContext(), this);
         map.getOverlays().add(mapEventsOverlay);
 
         loc = findViewById(R.id.btn_loc);
@@ -136,8 +126,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             @Override
             public void onClick(View view)
             {
-                LocationManager locationManager = new LocationManager(map);
-                locationManager.showLocation(mLocationOverlay);
+                locationManager.goToMyLocation();
             }
         });
 
@@ -243,12 +232,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                     REQUEST_PERMISSIONS_REQUEST_CODE);
         }
     }
-    public void showLocation()
-    {
-        mLocationOverlay.enableFollowLocation();
-        map.getOverlays().add(mLocationOverlay);
-        map.getController().setZoom(18.0);
-    }
     public void showCompass(Context context)
     {
         CompassOverlay mCompassOverlay = new CompassOverlay(context, new InternalCompassOrientationProvider(context), map);
@@ -260,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public boolean singleTapConfirmedHelper(GeoPoint p)
     {
         map.getOverlays().removeIf(x -> x instanceof Marker);
-        Log.i("TAPDUPA9", "single tapd");
+        Log.i("TAPD", "single tapd");
 
         Toast.makeText(getApplicationContext(), "Single Punktos: " + p.getLatitude() + " " + p.getLongitude(), Toast.LENGTH_SHORT).show();
 
@@ -275,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     @Override
     public boolean longPressHelper(GeoPoint p)
     {
-        Log.i("TAPDUPA9", "single tapd");
+        Log.i("TAPD", "single tapd");
         map.getOverlays().removeIf(x -> x instanceof Marker);
 
         Marker m = new Marker(map);
