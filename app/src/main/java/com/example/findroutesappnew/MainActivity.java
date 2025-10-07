@@ -2,9 +2,7 @@ package com.example.findroutesappnew;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -15,10 +13,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -40,7 +34,6 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.compass.CompassOverlay;
 import org.osmdroid.views.overlay.compass.InternalCompassOrientationProvider;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
@@ -53,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map;
     Button loc;
-    Button find;
     Button clear;
     MyLocationNewOverlay mLocationOverlay;
     GeoPoint startPoint;
@@ -61,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     String apiKey = "pk.f20efc3587b2e16667f447b8ae8065dc";
     Map<String, String> options = new HashMap<>();
     BottomBarFragmentManager bottomBarFragmentManager;
-    ActivityResultLauncher<Intent> someActivityResultLauncher;
     MapEventsOverlay mapEventsOverlay;
     LocationManager locationManager;
 
@@ -127,27 +118,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             public void onClick(View view)
             {
                 locationManager.goToMyLocation();
-            }
-        });
-
-        getResultFromActivity();
-
-        find = findViewById(R.id.btn_find);
-
-        find.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Intent intent = new Intent(getApplicationContext(), FindOptionsActivity.class);
-
-                GeoPoint myLocation = mLocationOverlay.getMyLocation();
-                double latitude = myLocation.getLatitude();
-                double longitude = myLocation.getLongitude();
-                intent.putExtra("LATITUDE", latitude);
-                intent.putExtra("LONGITUDE", longitude);
-
-                someActivityResultLauncher.launch(intent);
             }
         });
 
@@ -330,28 +300,5 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public FragmentManager getFManager()
     {
         return getSupportFragmentManager();
-    }
-
-    public void getResultFromActivity()
-    {
-        someActivityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                new ActivityResultCallback<ActivityResult>()
-                {
-                    @Override
-                    public void onActivityResult(ActivityResult result)
-                    {
-                        if (result.getResultCode() == FindOptionsActivity.RESULT_OK)
-                        {
-                            Intent data = result.getData();
-                            assert data != null;
-                            String url = data.getStringExtra("QUERY");
-                            int color = data.getIntExtra("COLOR", Color.WHITE);
-                            Toast.makeText(getApplicationContext(), url, Toast.LENGTH_SHORT).show();
-                            FindRoutes fr = new FindRoutes(mLocationOverlay.getMyLocation(), getApplicationContext(), map, getSupportFragmentManager(), url, color);
-                            fr.findRoutes();
-                            clear.setVisibility(View.VISIBLE);
-                        }
-                    }
-                });
     }
 }

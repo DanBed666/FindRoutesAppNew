@@ -28,6 +28,7 @@ public class LocationManager
     public void goToMyLocation()
     {
         map.getController().setCenter(mLocationOverlay.getMyLocation());
+        map.getController().setZoom(18.0);
     }
 
     public boolean checkIfLocationTapped(GeoPoint touched)

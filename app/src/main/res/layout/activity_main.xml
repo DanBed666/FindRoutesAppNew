@@ -18,18 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="60dp"
-        android:text="LOC" />
-
-    <Button
-        android:id="@+id/btn_find"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
-        android:text="FIND" />
+        android:text="LOC" />
 
     <Button
         android:id="@+id/btn_clear"
@@ -38,7 +28,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="60dp"
         android:visibility="invisible"
         android:text="CLEAR" />
 
