@@ -247,6 +247,15 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         Toast.makeText(getApplicationContext(), "Single Punktos: " + p.getLatitude() + " " + p.getLongitude(), Toast.LENGTH_SHORT).show();
 
+        if (locationManager.checkIfLocationTapped(p))
+        {
+            Log.i("TOUCH", "lokalizacja");
+        }
+        else
+        {
+            Log.i("TOUCH", "nie");
+        }
+
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView) != null)
         {
             bottomBarFragmentManager.hideFragment();

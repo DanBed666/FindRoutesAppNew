@@ -1,5 +1,7 @@
 package com.example.findroutesappnew;
 
+import org.osmdroid.util.BoundingBox;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -26,5 +28,15 @@ public class LocationManager
     public void goToMyLocation()
     {
         map.getController().setCenter(mLocationOverlay.getMyLocation());
+    }
+
+    public boolean checkIfLocationTapped(GeoPoint touched)
+    {
+        GeoPoint startPoint = mLocationOverlay.getMyLocation();
+
+        BoundingBox bb = new BoundingBox(startPoint.getLatitude() + 0.0005, startPoint.getLongitude() + 0.0005,
+                startPoint.getLatitude() - 0.0005, startPoint.getLongitude() - 0.0005);
+
+        return bb.contains(touched);
     }
 }
