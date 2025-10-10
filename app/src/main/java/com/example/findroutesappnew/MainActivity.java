@@ -215,11 +215,10 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         map.getOverlays().removeIf(x -> x instanceof Marker);
         Log.i("TAPD", "single tapd");
 
-        Toast.makeText(getApplicationContext(), "Single Punktos: " + p.getLatitude() + " " + p.getLongitude(), Toast.LENGTH_SHORT).show();
-
         if (locationManager.checkIfLocationTapped(p))
         {
             Log.i("TOUCH", "lokalizacja");
+            getPlace(p);
         }
         else
         {
