@@ -215,10 +215,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         map.getOverlays().removeIf(x -> x instanceof Marker);
         Log.i("TAPD", "single tapd");
 
+
         if (locationManager.checkIfLocationTapped(p))
         {
             Log.i("TOUCH", "lokalizacja");
-            getPlace(p);
+            getPlace(p, "DEVLOC");
         }
         else
         {
@@ -247,11 +248,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         yourLocation = false;
         startPoint = p;
 
-        getPlace(p);
+        getPlace(p, "LONGPRESS");
 
         return true;
     }
-    public void getPlace(GeoPoint placeCord)
+    public void getPlace(GeoPoint placeCord, String placeCode)
     {
         PlaceViewModel placeViewModel = new PlaceViewModel();
 
@@ -267,11 +268,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             {
                 if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView) != null)
                 {
-                    bottomBarFragmentManager.replaceFragment(place.getDisplay_name(), placeCord);
+                    bottomBarFragmentManager.replaceFragment(place.getDisplay_name(), placeCord, placeCode);
                 }
                 else
                 {
-                    bottomBarFragmentManager.showFragment(place.getDisplay_name(), placeCord);
+                    bottomBarFragmentManager.showFragment(place.getDisplay_name(), placeCord, placeCode);
                 }
             }
         });

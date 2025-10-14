@@ -54,6 +54,7 @@ public class KMLStyler implements KmlFeature.Styler
         String operator = kmlPlacemark.getExtendedData("operator");
 
         RouteInfo routeInfo = new RouteInfo(name, colour, operator);
+        String placeCode = "INFO";
 
         polyline.setOnClickListener(new Polyline.OnClickListener()
         {
@@ -62,11 +63,11 @@ public class KMLStyler implements KmlFeature.Styler
             {
                 if (fragmentManager.findFragmentById(R.id.fragmentContainerView) != null)
                 {
-                    bottomBarFragmentManager.replaceFragment(kmlPlacemark.getExtendedData("name"), routeInfo);
+                    bottomBarFragmentManager.replaceFragment(kmlPlacemark.getExtendedData("name"), routeInfo, placeCode);
                 }
                 else
                 {
-                    bottomBarFragmentManager.showFragment(kmlPlacemark.getExtendedData("name"), routeInfo);
+                    bottomBarFragmentManager.showFragment(kmlPlacemark.getExtendedData("name"), routeInfo, placeCode);
                 }
 
                 return true;

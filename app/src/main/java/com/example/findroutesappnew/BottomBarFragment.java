@@ -51,6 +51,7 @@ public class BottomBarFragment extends Fragment {
     MyResultReceiver myResultReceiver;
     MapView map;
     RouteInfo infoRoute;
+    String code;
 
     public BottomBarFragment() {
         // Required empty public constructor
@@ -116,6 +117,7 @@ public class BottomBarFragment extends Fragment {
             infoRoute = (RouteInfo) getArguments().getSerializable("INFO");
             latitude = getArguments().getDouble("LATITUDE");
             longitude = getArguments().getDouble("LONGITUDE");
+            code = getArguments().getString("CODE");
         }
     }
 
@@ -173,7 +175,33 @@ public class BottomBarFragment extends Fragment {
             }
         });
 
+        manageButtons();
         nazwa.setText(test);
         return v;
+    }
+
+    public void manageButtons()
+    {
+        if (code.equals("DEVLOC"))
+        {
+            find.setVisibility(View.VISIBLE);
+            route.setVisibility(View.INVISIBLE);
+            save.setVisibility(View.INVISIBLE);
+            info.setVisibility(View.INVISIBLE);
+        }
+        else if (code.equals("LONGPRESS"))
+        {
+            find.setVisibility(View.VISIBLE);
+            route.setVisibility(View.INVISIBLE);
+            save.setVisibility(View.INVISIBLE);
+            info.setVisibility(View.INVISIBLE);
+        }
+        else if (code.equals("INFO"))
+        {
+            find.setVisibility(View.VISIBLE);
+            route.setVisibility(View.VISIBLE);
+            save.setVisibility(View.VISIBLE);
+            info.setVisibility(View.VISIBLE);
+        }
     }
 }

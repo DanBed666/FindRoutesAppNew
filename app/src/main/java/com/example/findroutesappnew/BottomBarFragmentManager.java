@@ -16,12 +16,13 @@ public class BottomBarFragmentManager
         this.fragmentManager = fragmentManager;
     }
 
-    public void showFragment(String name, GeoPoint startPoint)
+    public void showFragment(String name, GeoPoint startPoint, String placeCode)
     {
         Bundle bundle = new Bundle();
         bundle.putString("NAZWA", name);
         bundle.putDouble("LATITUDE", startPoint.getLatitude());
         bundle.putDouble("LONGITUDE", startPoint.getLongitude());
+        bundle.putString("CODE", placeCode);
 
         bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);
@@ -31,11 +32,12 @@ public class BottomBarFragmentManager
                 .commit();
     }
 
-    public void showFragment(String name, RouteInfo info)
+    public void showFragment(String name, RouteInfo info, String placeCode)
     {
         Bundle bundle = new Bundle();
         bundle.putString("NAZWA", name);
         bundle.putSerializable("INFO", info);
+        bundle.putString("CODE", placeCode);
 
         bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);
@@ -52,12 +54,13 @@ public class BottomBarFragmentManager
                 .commit();
     }
 
-    public void replaceFragment(String name, GeoPoint startPoint)
+    public void replaceFragment(String name, GeoPoint startPoint, String placeCode)
     {
         Bundle bundle = new Bundle();
         bundle.putString("NAZWA", name);
         bundle.putDouble("LATITUDE", startPoint.getLatitude());
         bundle.putDouble("LONGITUDE", startPoint.getLongitude());
+        bundle.putString("CODE", placeCode);
 
         bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);
@@ -67,11 +70,12 @@ public class BottomBarFragmentManager
                 .commit();
     }
 
-    public void replaceFragment(String name, RouteInfo info)
+    public void replaceFragment(String name, RouteInfo info, String placeCode)
     {
         Bundle bundle = new Bundle();
         bundle.putString("NAZWA", name);
         bundle.putSerializable("INFO", info);
+        bundle.putString("CODE", placeCode);
 
         bottomBarFragment = new BottomBarFragment();
         bottomBarFragment.setArguments(bundle);
